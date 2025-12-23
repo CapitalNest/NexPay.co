@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NexPay — Transaktionsbeleg</title>
+<meta name="theme-color" content="#ffffff">
+
+<style>
+:root{
+  --text:#0b1220;
+  --muted:#5b6474;
+  --line:#e6e8ec;
+  --success:#15803d;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  background:#ffffff;
+  color:var(--text);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
+/* Page */
+.page{
+  min-height:100vh;
+  max-width:760px;
+  margin:auto;
+  padding:36px 22px 48px;
+}
+
+/* Header */
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:42px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.logo{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#f7931a,#c87118);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-weight:900;
+  font-size:20px;
+}
+.company{
+  font-weight:800;
+  font-size:18px;
+}
+.doc{
+  font-size:14px;
+  color:var(--muted);
+}
+
+/* Status */
+.status{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:28px;
+}
+.check{
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:var(--success);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:14px;
+}
+.status-text{
+  font-weight:700;
+  font-size:19px;
+}
+
+/* Amount */
+.amount{
+  font-size:42px;
+  font-weight:900;
+  margin-bottom:4px;
+}
+.amount-sub{
+  color:var(--muted);
+  font-size:15px;
+  margin-bottom:34px;
+}
+
+/* Section */
+.section{
+  border-top:1px solid var(--line);
+}
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  padding:18px 0;
+  border-bottom:1px solid var(--line);
+}
+.label{
+  color:var(--muted);
+  font-size:14px;
+}
+.value{
+  font-weight:600;
+  text-align:right;
+  max-width:65%;
+  word-break:break-all;
+}
+
+/* Editable */
+input{
+  border:none;
+  outline:none;
+  background:transparent;
+  font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  color:var(--text);
+  text-align:right;
+  width:65%;
+}
+
+/* Footer */
+.footer{
+  margin-top:40px;
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.7;
+}
+
+/* Action */
+.actions{
+  margin-top:30px;
+}
+.btn{
+  width:100%;
+  padding:16px;
+  font-size:16px;
+  font-weight:700;
+  border-radius:8px;
+  border:1px solid var(--line);
+  background:#ffffff;
+  cursor:pointer;
+}
+.btn:hover{background:#f9fafb}
+
+/* Print */
+@media print{
+  .btn{display:none}
+  body{background:#fff}
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">
+      <div class="logo">₿</div>
+      <div class="company">NexPay</div>
+    </div>
+    <div class="doc">Transaktionsbeleg</div>
+  </div>
+
+  <!-- Status -->
+  <div class="status">
+    <div class="check">✓</div>
+    <div class="status-text">Transaktion erfolgreich abgeschlossen</div>
+  </div>
+
+  <!-- Amount -->
+  <div class="amount">0,0025 BTC</div>
+  <div class="amount-sub">Zahlung wurde bestätigt und im Netzwerk verbucht</div>
+
+  <!-- Details -->
+  <div class="section">
+
+    <div class="row">
+      <span class="label">Empfänger-UID</span>
+      <input type="text" value="161800843">
+    </div>
+
+    <div class="row">
+      <span class="label">Transaktions-ID</span>
+      <span class="value">TXN-8934-AF21</span>
+    </div>
+
+    <div class="row">
+      <span class="label">Datum & Uhrzeit</span>
+      <input type="text" id="tx-date">
+    </div>
+
+    <div class="row">
+      <span class="label">Netzwerkgebühr</span>
+      <span class="value">0,00005 BTC</span>
+    </div>
+
+    <div class="row">
+      <span class="label">Status</span>
+      <span class="value">Bestätigt</span>
+    </div>
+
+  </div>
+
+  <!-- Actions -->
+  <div class="actions">
+    <button class="btn" onclick="window.print()">Beleg herunterladen</button>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    Diese Transaktion wurde erfolgreich über das Blockchain-Netzwerk verarbeitet.
+    Der vorliegende Beleg dient ausschließlich zu Informationszwecken und stellt
+    keinen rechtsverbindlichen Zahlungsnachweis dar.
+  </div>
+
+</div>
+
+<script>
+const now = new Date();
+document.getElementById("tx-date").value =
+  now.toLocaleDateString("de-DE") + " " + now.toLocaleTimeString("de-DE");
+</script>
+
+</body>
+</html>

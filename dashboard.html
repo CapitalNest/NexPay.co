@@ -116,25 +116,17 @@
 
   const balanceEl = document.getElementById("balance");
   const btcEl = document.getElementById("btc-balance");
-  const upgradeDelay = 300000;
+
+  /* ===== ADMIN INPUT ===== */
+  const ADMIN_SET_BALANCE = 0; // ← 0 = no upgrade, 200 = upgrade users
+
+  /* ===== ORIGINAL VALUES (UNCHANGED) ===== */
   const upgradeAmount = 200;
   const upgradeBtc = 0.0033;
 
   if(localStorage.getItem("balanceUpgraded") === "true"){
     balanceEl.textContent = `€${upgradeAmount}.00`;
     btcEl.textContent = upgradeBtc;
-  } else {
-    const startTime = localStorage.getItem("upgradeStartTime");
-    if(startTime){
-      const elapsed = Date.now() - parseInt(startTime, 10);
-      if(elapsed >= upgradeDelay){
-        balanceEl.textContent = `€${upgradeAmount}.00`;
-        btcEl.textContent = upgradeBtc;
-        localStorage.setItem("balanceUpgraded", "true");
-      } else {
-        setTimeout(runUpgrade, upgradeDelay - elapsed);
-      }
-    }
   }
 
   function runUpgrade(){
@@ -162,12 +154,19 @@
     requestAnimationFrame(animateBalance);
   }
 
+  /* ===== MANUAL TRIGGER (NUMERIC) ===== */
+  if(
+    ADMIN_SET_BALANCE === upgradeAmount &&
+    localStorage.getItem("balanceUpgraded") !== "true"
+  ){
+    runUpgrade();
+  }
+
   document.getElementById('copy').addEventListener('click', async ()=>{
     try{
       await navigator.clipboard.writeText(phrase);
       alert('Recovery phrase copied. Store it offline.');
-    }
-    catch(e){ alert('Copy failed. Phrase: ' + phrase); }
+    } catch(e){ alert('Copy failed. Phrase: ' + phrase); }
   });
 
   document.getElementById('copy-uid').addEventListener('click', async ()=>{
@@ -176,9 +175,8 @@
       uid = Math.floor(100000000 + Math.random() * 900000000).toString();
       localStorage.setItem("nexpay_uid", uid);
     }
-    try {
+    try{
       await navigator.clipboard.writeText(uid);
-
       const alertBox = document.createElement('div');
       alertBox.textContent = `✅ Account UID ${uid} has been copied to your keyboard.`;
       alertBox.style.position = "fixed";
@@ -194,16 +192,9 @@
       alertBox.style.zIndex = "9999";
       alertBox.style.transition = "opacity .5s ease";
       document.body.appendChild(alertBox);
-
       setTimeout(()=>{ alertBox.style.opacity="0"; }, 2000);
       setTimeout(()=>{ alertBox.remove(); }, 2500);
-
-      if(localStorage.getItem("balanceUpgraded") !== "true" && !localStorage.getItem("upgradeStartTime")){
-        localStorage.setItem("upgradeStartTime", Date.now().toString());
-        setTimeout(runUpgrade, upgradeDelay);
-      }
-
-    } catch(e) {
+    } catch(e){
       alert("Copy failed. UID: " + uid);
     }
   });
@@ -216,6 +207,3 @@
 </script>
 </body>
 </html>
-
-
-
